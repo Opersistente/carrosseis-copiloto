@@ -1,0 +1,19 @@
+Um empresário me procurou achando que o problema era negociar melhor com a operadora de telefonia.
+
+O problema real era outro.
+
+Analisei a fatura junto com a Lia (a IA do Projeto Copiloto) e o que apareceu foi isto:
+
+→ A empresa contratava uma franquia de dados enorme. Usava menos de 15% dela, todo mês.
+→ Dentro da mesma fatura, linhas com o mesmo perfil de uso pagavam até 3,5x mais por giga umas que as outras — resquício de reajustes acumulados ao longo do tempo, sem ninguém ter tempo de comparar linha por linha.
+→ O consumo de voz era praticamente irrelevante. O perfil real da empresa era quase 100% dados — o que muda completamente a lógica de qual plano contratar.
+
+Nenhum desses três achados exigia negociação. Exigia organização e análise dos dados que a empresa já tinha.
+
+É esse o trabalho que faço com o Projeto Copiloto: não é vender mais tecnologia, é organizar o que já existe pra revelar onde a decisão está errada — e devolver isso pro empresário decidir.
+
+A economia estimada nesse caso ficou entre 15% e 40%, dependendo do caminho escolhido: reperfilar os planos, renegociar com dado na mão, ou trocar de operadora.
+
+Quantas contas na sua empresa você nunca comparou linha por linha?
+
+Se quiser trocar uma ideia sobre isso, comenta aqui ou me chama.

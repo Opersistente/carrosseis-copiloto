@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Carrossel — Vazamento na fatura de telefonia</title>
+<link href="../_vendor/inter.css" rel="stylesheet">
+<script src="../_vendor/lucide.js"></script>
+<style>
+  :root {
+    --bg: #0A1220;
+    --primary: #4DA3FF;
+    --accent2: #6EE7F0;
+    --whatsapp: #25D366;
+    --text: #ffffff;
+    --text-soft: rgba(255,255,255,0.72);
+    --text-softer: rgba(255,255,255,0.50);
+    --card-bg: rgba(255,255,255,0.05);
+    --card-border: rgba(255,255,255,0.10);
+    --glow: rgba(77,163,255,0.18);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; width: 1080px; height: 1350px; overflow: hidden;
+    background: var(--bg); color: var(--text);
+    font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif;
+  }
+  .slide {
+    display: none; width: 1080px; height: 1350px; position: relative;
+    flex-direction: column; padding: 90px 84px; overflow: hidden;
+    background: radial-gradient(circle at 50% 0%, var(--glow), transparent 60%), var(--bg);
+  }
+  .slide.active { display: flex; }
+
+  .brand { position: absolute; top: 56px; left: 84px; display: flex; align-items: center; gap: 10px;
+    font-size: 20px; font-weight: 800; letter-spacing: 0.02em; color: var(--text-softer); }
+  .brand .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 10px var(--primary); }
+  .page-count { position: absolute; bottom: 56px; right: 84px; font-size: 18px; font-weight: 700; color: var(--text-softer); }
+  .swipe-hint { position: absolute; bottom: 56px; left: 84px; font-size: 18px; font-weight: 600; color: var(--text-softer); display: flex; align-items: center; gap: 8px; }
+
+  .body-wrap { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  h1.headline { font-size: 64px; font-weight: 900; line-height: 1.12; margin: 0 0 24px; }
+  h1.headline .accent { color: var(--primary); }
+  p.sub { font-size: 30px; line-height: 1.5; color: var(--text-soft); margin: 0; font-weight: 500; max-width: 840px; }
+  .kicker { font-size: 22px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent2); margin-bottom: 20px; }
+
+  /* fonte (fatura) mockup */
+  .invoice-mock { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 24px; padding: 40px; margin-top: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); }
+  .invoice-head { display: flex; align-items: center; gap: 18px; margin-bottom: 30px; padding-bottom: 26px; border-bottom: 1px solid var(--card-border); }
+  .invoice-icon { width: 56px; height: 56px; border-radius: 16px; background: rgba(77,163,255,0.15); border: 1px solid rgba(77,163,255,0.3);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .invoice-label { font-size: 20px; font-weight: 800; color: var(--text); }
+  .invoice-sub { font-size: 16px; color: var(--text-softer); margin-top: 2px; }
+  .invoice-lines { display: flex; flex-direction: column; gap: 16px; }
+  .invoice-line { height: 14px; border-radius: 7px; background: rgba(255,255,255,0.08); }
+
+  /* analysis mockup (achados) */
+  .mockup-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 24px; padding: 44px; margin-top: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); }
+  .mockup-topbar { display:flex; align-items:center; gap:10px; margin-bottom: 28px; }
+  .mockup-dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.15); }
+  .mockup-title { font-size: 20px; color: var(--text-softer); font-weight: 700; margin-left: 8px; }
+  .gauge-track { width: 100%; height: 40px; border-radius: 20px; background: rgba(255,255,255,0.08); overflow: hidden; margin: 18px 0 14px; }
+  .gauge-fill { height: 100%; border-radius: 20px; background: linear-gradient(90deg, var(--primary), var(--accent2)); }
+  .gauge-labels { display: flex; justify-content: space-between; font-size: 20px; color: var(--text-soft); font-weight: 600; }
+  .mock-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  .mock-table td { padding: 14px 10px; font-size: 22px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .mock-table td:first-child { color: var(--text-soft); font-weight: 600; }
+  .mock-table td:last-child { text-align: right; font-weight: 800; color: var(--text); }
+
+  /* processo — timeline conectada */
+  .timeline { display: flex; flex-direction: column; margin-top: 36px; }
+  .tl-step { display: flex; gap: 24px; position: relative; padding-bottom: 38px; }
+  .tl-step:last-child { padding-bottom: 0; }
+  .tl-step:not(:last-child)::before { content: ''; position: absolute; left: 23px; top: 50px; bottom: -6px; width: 2px; background: var(--card-border); }
+  .tl-marker { width: 48px; height: 48px; border-radius: 50%; background: rgba(77,163,255,0.15); border: 2px solid var(--primary);
+    color: var(--primary); font-weight: 900; font-size: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; z-index: 1; }
+  .tl-content h3 { font-size: 26px; font-weight: 800; margin: 4px 0 6px; }
+  .tl-content p { font-size: 19px; color: var(--text-soft); margin: 0; line-height: 1.4; }
+
+  /* conclusao — caminhos */
+  .path-list { display: flex; flex-direction: column; gap: 18px; margin-top: 32px; }
+  .path-item { display: flex; align-items: center; gap: 24px; background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 18px; padding: 24px 28px; }
+  .path-num { font-size: 30px; font-weight: 900; color: var(--primary); width: 44px; flex-shrink: 0; }
+  .path-item h3 { font-size: 24px; font-weight: 800; margin: 0 0 4px; }
+  .path-item p { font-size: 17px; color: var(--text-softer); margin: 0; }
+
+  /* CTA slide */
+  .cta-slide { align-items: center; text-align: center; justify-content: center; }
+  .cta-icon { width: 110px; height: 110px; border-radius: 32px; background: var(--whatsapp); display: flex; align-items: center; justify-content: center; margin: 0 auto 40px; box-shadow: 0 20px 50px rgba(37,211,102,0.4); }
+  .cta-btn { display: inline-flex; align-items: center; gap: 14px; margin-top: 44px; padding: 22px 44px; border-radius: 9999px;
+    background: var(--whatsapp); color: #fff; font-weight: 800; font-size: 26px; box-shadow: 0 16px 40px rgba(37,211,102,0.4); }
+</style>
+</head>
+<body>
+
+  <!-- SLIDE 1 — GANCHO -->
+  <section class="slide" id="slide-1">
+    <div class="brand"><span class="dot"></span>PROJETO COPILOTO</div>
+    <div class="body-wrap">
+      <div class="kicker">Um caso real</div>
+      <h1 class="headline">Contratou mais de <span class="accent">2 mil GB</span> de internet no celular da empresa.<br>Usou menos de <span class="accent">300</span>.</h1>
+      <p class="sub">Isso é dinheiro saindo todo mês — sem ninguém perceber.</p>
+    </div>
+    <div class="swipe-hint"><i data-lucide="chevrons-right" class="w-5 h-5"></i> arraste</div>
+    <div class="page-count">1/8</div>
+  </section>
+
+  <!-- SLIDE 2 — FONTE -->
+  <section class="slide" id="slide-2">
+    <div class="brand"><span class="dot"></span>PROJETO COPILOTO</div>
+    <div class="body-wrap">
+      <div class="kicker">De onde veio isso</div>
+      <h1 class="headline">Tudo começou com uma <span class="accent">fatura de celular</span> — a mesma que ninguém tem tempo de olhar de verdade.</h1>
+      <div class="invoice-mock">
+        <div class="invoice-head">
+          <div class="invoice-icon"><i data-lucide="file-text" class="w-6 h-6" style="color:var(--primary)"></i></div>
+          <div>
+            <div class="invoice-label">fatura · celular corporativo</div>
+            <div class="invoice-sub">dezenas de linhas, uma fatura só</div>
+          </div>
+        </div>
+        <div class="invoice-lines">
+          <div class="invoice-line" style="width:78%"></div>
+          <div class="invoice-line" style="width:92%"></div>
+          <div class="invoice-line" style="width:65%"></div>
+          <div class="invoice-line" style="width:85%"></div>
+          <div class="invoice-line" style="width:55%"></div>
+        </div>
+      </div>
+    </div>
+    <div class="page-count">2/8</div>
+  </section>
+
+  <!-- SLIDE 3 — PROCESSO -->
+  <section class="slide" id="slide-3">
+    <div class="brand"><span class="dot"></span>PROJETO COPILOTO</div>
+    <div class="body-wrap">
+      <div class="kicker">O que a Lia fez com isso</div>
+      <h1 class="headline">4 passos. Poucos <span class="accent">minutos.</span></h1>
+      <div class="timeline">
+        <div class="tl-step">
+          <div class="tl-marker">1</div>
+          <div class="tl-content"><h3>Organizou os dados da fatura</h3><p>Reuniu todas as linhas, planos e consumo num só lugar.</p></div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-marker">2</div>
+          <div class="tl-content"><h3>Calculou o custo real</h3><p>Custo por linha, por GB, por plano — não só o total no fim da fatura.</p></div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-marker">3</div>
+          <div class="tl-content"><h3>Comparou com o mercado</h3><p>Confrontou o que a empresa paga com o que se cobra hoje.</p></div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-marker">4</div>
+          <div class="tl-content"><h3>Montou os caminhos possíveis</h3><p>Quem decide qual seguir é o empresário — nunca a Lia.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="page-count">3/8</div>
+  </section>
+
+  <!-- SLIDE 4 — ACHADO PRINCIPAL -->
+  <section class="slide" id="slide-4">
+    <div class="brand"><span class="dot"></span>PROJETO COPILOTO</div>
+    <div class="body-wrap">
+      <div class="kicker">O que ela encontrou</div>
+      <h1 class="headline">86% da franquia de dados contratada <span class="accent">nunca foi usada.</span></h1>
+      <div class="mockup-card">
+        <div class="mockup-topbar"><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-title">consumo vs. contratado</span></div>
+        <div>
+          <div class="gauge-track"><div class="gauge-fill" style="width:14%"></div></div>
+          <div class="gauge-labels"><span>usado: 305 GB</span><span>contratado: 2.210 GB</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="page-count">4/8</div>
+  </section>
+
+  <!-- SLIDE 5 — ACHADO SECUNDÁRIO -->
+  <section class="slide" id="slide-5">
+    <div class="brand"><span class="dot"></span>PROJETO COPILOTO</div>
+    <div class="body-wrap">
+      <div class="kicker">A incoerência escondida</div>
+      <h1 class="headline">Em algumas linhas, o empresário pagava até <span class="accent">3,5x mais</span> por giga do que em outras.</h1>
+      <div class="mockup-card">
+        <div class="mockup-topbar"><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-title">custo por GB, por faixa de plano</span></div>
+        <table class="mock-table">
+          <tr><td>Faixa A</td><td>R$ 0,61 / GB</td></tr>
+          <tr><td>Faixa B</td><td>R$ 1,11 / GB</td></tr>
+          <tr><td>Faixa C</td><td>R$ 0,31 / GB</td></tr>
+          <tr><td>Faixa D</td><td>R$ 1,15 / GB</td></tr>
+        </table>
+      </div>
+      <p class="sub" style="margin-top:24px;">Ninguém tinha notado — porque ninguém tinha tempo de comparar linha por linha.</p>
+    </div>
+    <div class="page-count">5/8</div>
+  </section>
+
+  <!-- SLIDE 6 — CONCLUSAO -->
+  <section class="slide" id="slide-6">
+    <div class="brand"><span class="dot"></span>PROJETO COPILOTO</div>
+    <div class="body-wrap">
+      <div class="kicker">A conclusão da Lia</div>
+      <h1 class="headline" style="font-size:52px;">3 caminhos possíveis. Economia estimada entre <span class="accent">15% e 40%.</span></h1>
+      <div class="path-list">
+        <div class="path-item"><div class="path-num">1</div><div><h3>Reperfilar os planos</h3><p>Ajustar cada linha ao que ela realmente consome.</p></div></div>
+        <div class="path-item"><div class="path-num">2</div><div><h3>Renegociar com dado na mão</h3><p>Usar a análise real como argumento com a operadora.</p></div></div>
+        <div class="path-item"><div class="path-num">3</div><div><h3>Trocar de operadora</h3><p>Maior economia possível, maior esforço de transição.</p></div></div>
+      </div>
+    </div>
+    <div class="page-count">6/8</div>
+  </section>
+
+  <!-- SLIDE 7 — MARCA -->
+  <section class="slide" id="slide-7">
+    <div class="brand"><span class="dot"></span>PROJETO COPILOTO</div>
+    <div class="body-wrap">
+      <div class="kicker">Por trás disso</div>
+      <h1 class="headline">Isso é o Projeto Copiloto: eu + a Lia organizando o que sua empresa já tem, pra você decidir melhor.</h1>
+      <p class="sub"><b style="color:var(--text)">Você continua no comando.</b></p>
+    </div>
+    <div class="page-count">7/8</div>
+  </section>
+
+  <!-- SLIDE 8 — CTA -->
+  <section class="slide cta-slide" id="slide-8">
+    <div class="brand" style="position:absolute;"><span class="dot"></span>PROJETO COPILOTO</div>
+    <div class="cta-icon"><svg viewBox="0 0 448 512" width="52" height="52" fill="#fff"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg></div>
+    <h1 class="headline" style="font-size:56px;">Onde a <span class="accent">SUA</span> empresa está perdendo dinheiro sem perceber?</h1>
+    <p class="sub">Chama no WhatsApp — a Lia começa a olhar hoje.</p>
+    <div class="cta-btn"><i data-lucide="message-circle" class="w-6 h-6"></i> Falar com a Lia</div>
+    <div class="page-count">8/8</div>
+  </section>
+
+<script>
+  lucide.createIcons();
+  const n = new URLSearchParams(location.search).get('slide') || '1';
+  const el = document.getElementById('slide-' + n);
+  if (el) el.classList.add('active');
+</script>
+</body>
+</html>
