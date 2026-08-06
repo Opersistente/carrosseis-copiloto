@@ -11,7 +11,7 @@ import {
   deletePreset as deletePresetFromStore,
   uploadAsset,
 } from "@/lib/store";
-import type { InputMaterial, Post, Preset } from "@/lib/types";
+import type { ContentType, InputMaterial, Post, Preset } from "@/lib/types";
 import { publishToInstagram, publishToLinkedin } from "@/lib/publish";
 
 export async function createPost(formData: FormData) {
@@ -19,6 +19,7 @@ export async function createPost(formData: FormData) {
   const title = String(formData.get("title") || "").trim() || "Post sem título";
   const presetId = String(formData.get("presetId") || "");
   const notes = String(formData.get("notes") || "").trim();
+  const contentType = (String(formData.get("contentType") || "caso") as ContentType);
 
   const input: InputMaterial = { type };
   if (type === "link") {
@@ -41,6 +42,7 @@ export async function createPost(formData: FormData) {
     id: newId("post"),
     title,
     status: "pending",
+    contentType,
     input,
     presetId,
     notes: notes || undefined,

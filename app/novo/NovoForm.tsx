@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { Preset } from "@/lib/types";
+import type { ContentType, Preset } from "@/lib/types";
 
 type MaterialType = "text" | "link" | "file" | "pdf";
 
@@ -12,6 +12,17 @@ const TYPE_LABEL: Record<MaterialType, string> = {
   pdf: "PDF",
 };
 
+const CONTENT_TYPE_LABEL: Record<ContentType, { label: string; description: string }> = {
+  caso: {
+    label: "Situação (caso)",
+    description: "A Lia encontrou uma situação/dor real, investigou, solucionou e aplicou. Roteiro conta essa história: fonte → processo → achados → conclusão.",
+  },
+  informativo: {
+    label: "Informativo",
+    description: "Não é um caso — é informação útil (pesquisa, dado de mercado, dica). Roteiro explica o contexto e os pontos principais, sem narrativa de caso.",
+  },
+};
+
 export default function NovoForm({
   presets,
   createPost,
@@ -20,12 +31,31 @@ export default function NovoForm({
   createPost: (formData: FormData) => void;
 }) {
   const [type, setType] = useState<MaterialType>("text");
+  const [contentType, setContentType] = useState<ContentType>("caso");
 
   return (
     <form action={createPost} className="card p-6 space-y-5 max-w-2xl">
       <div>
         <label htmlFor="title">Título curto (só pra identificar na fila)</label>
         <input id="title" name="title" placeholder="Ex: vazamento de dados na fatura" required />
+      </div>
+
+      <div>
+        <label>Formato do post</label>
+        <div className="flex flex-wrap gap-2">
+          {(Object.keys(CONTENT_TYPE_LABEL) as ContentType[]).map((ct) => (
+            <button
+              type="button"
+              key={ct}
+              onClick={() => setContentType(ct)}
+              className={`btn ${contentType === ct ? "btn-primary" : "btn-ghost"}`}
+            >
+              {CONTENT_TYPE_LABEL[ct].label}
+            </button>
+          ))}
+        </div>
+        <p className="text-xs text-softer mt-1">{CONTENT_TYPE_LABEL[contentType].description}</p>
+        <input type="hidden" name="contentType" value={contentType} />
       </div>
 
       <div>

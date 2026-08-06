@@ -1,5 +1,7 @@
 export type PostStatus = "pending" | "generated" | "approved" | "published";
 
+export type ContentType = "caso" | "informativo";
+
 export type InputMaterial = {
   type: "file" | "link" | "pdf" | "text";
   text?: string;
@@ -25,6 +27,7 @@ export type Post = {
   id: string;
   title: string;
   status: PostStatus;
+  contentType: ContentType;
   input: InputMaterial;
   presetId: string;
   createdAt: string;

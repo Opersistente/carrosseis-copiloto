@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { newId, savePost } from "@/lib/store";
-import type { InputMaterial, Post } from "@/lib/types";
+import type { ContentType, InputMaterial, Post } from "@/lib/types";
 
 export async function POST(req: NextRequest) {
   const secret = req.headers.get("x-intake-secret");
@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "invalid JSON body" }, { status: 400 });
   }
 
-  const { title, type, text, url, fileUrl, fileName, presetId, notes, source } = body as {
+  const { title, type, text, url, fileUrl, fileName, presetId, contentType, notes, source } = body as {
     title?: string;
     type?: InputMaterial["type"];
     text?: string;
@@ -21,12 +21,16 @@ export async function POST(req: NextRequest) {
     fileUrl?: string;
     fileName?: string;
     presetId?: string;
+    contentType?: ContentType;
     notes?: string;
     source?: string;
   };
 
   if (!type || !["text", "link", "file", "pdf"].includes(type)) {
     return NextResponse.json({ error: "type must be text, link, file or pdf" }, { status: 400 });
+  }
+  if (contentType && !["caso", "informativo"].includes(contentType)) {
+    return NextResponse.json({ error: "contentType must be caso or informativo" }, { status: 400 });
   }
   if (type === "text" && !text) {
     return NextResponse.json({ error: "text is required for type=text" }, { status: 400 });
@@ -44,6 +48,7 @@ export async function POST(req: NextRequest) {
     id: newId("post"),
     title: title?.trim() || "Post sem título",
     status: "pending",
+    contentType: contentType || "caso",
     input,
     presetId: presetId || "corporate-blue",
     notes: [source ? `Origem: ${source}` : null, notes].filter(Boolean).join(" — ") || undefined,

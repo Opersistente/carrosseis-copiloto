@@ -9,6 +9,6 @@ if (filtered.length === 0) {
   console.log(filter ? `Nenhum post com status "${filter}".` : "Fila vazia.");
 } else {
   for (const p of filtered.sort((a, b) => a.createdAt.localeCompare(b.createdAt))) {
-    console.log(`[${p.status}] ${p.id} — ${p.title} (preset: ${p.presetId || "—"})`);
+    console.log(`[${p.status}] ${p.id} — ${p.title} (preset: ${p.presetId || "—"}, formato: ${p.contentType || "caso"})`);
   }
 }

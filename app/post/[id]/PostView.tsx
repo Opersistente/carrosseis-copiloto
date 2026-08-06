@@ -39,6 +39,8 @@ export default function PostView({ post, preset }: { post: Post; preset: Preset 
         <div>
           <div className="text-softer text-xs mb-1">Estilo</div>
           <div className="font-semibold">{preset?.name ?? "—"}</div>
+          <div className="text-softer text-xs mb-1 mt-3">Formato</div>
+          <div className="font-semibold capitalize">{post.contentType === "informativo" ? "Informativo" : "Situação (caso)"}</div>
           {post.notes && <p className="text-soft mt-1">{post.notes}</p>}
         </div>
       </div>
