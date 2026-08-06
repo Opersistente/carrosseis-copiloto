@@ -30,7 +30,7 @@ export default function NovoForm({
 
       <div>
         <label>Tipo de material</label>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           {(Object.keys(TYPE_LABEL) as MaterialType[]).map((t) => (
             <button
               type="button"

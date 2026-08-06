@@ -30,7 +30,7 @@ export default function ConfigView({
   const [isPending, startTransition] = useTransition();
 
   return (
-    <div className="grid grid-cols-[280px_1fr] gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-6">
       <div className="space-y-2">
         <button className="btn btn-primary w-full" onClick={() => setEditing(BLANK)}>
           + Novo estilo
@@ -61,7 +61,7 @@ export default function ConfigView({
           >
             <input type="hidden" name="id" defaultValue={editing.id} />
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="name">Nome do estilo</label>
                 <input id="name" name="name" defaultValue={editing.name} required />
@@ -74,7 +74,7 @@ export default function ConfigView({
 
             <div>
               <div className="text-softer text-xs mb-2 uppercase font-bold">Cores</div>
-              <div className="grid grid-cols-5 gap-3">
+              <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
                 {(Object.keys(editing.colors) as (keyof Preset["colors"])[]).map((key) => (
                   <div key={key}>
                     <label htmlFor={key}>{key}</label>
@@ -92,7 +92,7 @@ export default function ConfigView({
 
             <div>
               <div className="text-softer text-xs mb-2 uppercase font-bold">Tipografia</div>
-              <div className="grid grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div>
                   <label htmlFor="headingFont">Fonte título</label>
                   <input id="headingFont" name="headingFont" defaultValue={editing.typography.headingFont} />

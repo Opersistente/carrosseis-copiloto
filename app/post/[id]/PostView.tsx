@@ -28,7 +28,7 @@ export default function PostView({ post, preset }: { post: Post; preset: Preset 
 
   return (
     <div className="space-y-6">
-      <div className="card p-5 grid grid-cols-2 gap-4 text-sm">
+      <div className="card p-5 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
         <div>
           <div className="text-softer text-xs mb-1">Material de origem</div>
           <div className="font-semibold capitalize">{post.input.type}</div>
@@ -56,7 +56,7 @@ export default function PostView({ post, preset }: { post: Post; preset: Preset 
         <>
           <div>
             <div className="text-softer text-xs mb-2 uppercase font-bold">Carrossel Instagram</div>
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {post.generated.slides.map((src, i) => (
                 <img key={i} src={src} alt={`Slide ${i + 1}`} className="rounded-lg border border-border" />
               ))}
@@ -72,7 +72,7 @@ export default function PostView({ post, preset }: { post: Post; preset: Preset 
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="capIg">Legenda Instagram</label>
               <textarea
