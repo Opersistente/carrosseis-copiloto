@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import type { Post, Preset } from "@/lib/types";
 import {
   updatePostCaptions,
@@ -10,6 +11,7 @@ import {
 } from "@/app/actions";
 
 export default function PostView({ post, preset }: { post: Post; preset: Preset | null }) {
+  const router = useRouter();
   const [captionInstagram, setCaptionInstagram] = useState(post.generated?.captionInstagram ?? "");
   const [captionLinkedin, setCaptionLinkedin] = useState(post.generated?.captionLinkedin ?? "");
   const [isPending, startTransition] = useTransition();
@@ -20,6 +22,7 @@ export default function PostView({ post, preset }: { post: Post; preset: Preset 
     startTransition(async () => {
       try {
         await fn();
+        router.refresh();
       } catch (e) {
         setError(e instanceof Error ? e.message : String(e));
       }

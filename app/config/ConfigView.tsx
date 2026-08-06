@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import type { Preset } from "@/lib/types";
 
 const BLANK: Omit<Preset, "createdAt" | "updatedAt"> = {
@@ -26,6 +27,7 @@ export default function ConfigView({
   savePreset: (formData: FormData) => void;
   deletePreset: (id: string) => void;
 }) {
+  const router = useRouter();
   const [editing, setEditing] = useState<Preset | (typeof BLANK) | null>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -143,6 +145,7 @@ export default function ConfigView({
                     startTransition(async () => {
                       await deletePreset(editing.id);
                       setEditing(null);
+                      router.refresh();
                     })
                   }
                 >
