@@ -4,6 +4,15 @@ const META_API = "https://graph.facebook.com/v21.0";
 const LINKEDIN_API = "https://api.linkedin.com";
 const LINKEDIN_VERSION = "202607";
 
+// LinkedIn Flavored Text: esses caracteres são reservados pra formatação/menção
+// no campo `commentary` da API. Sem escapar, a API trunca o texto no primeiro
+// caractere reservado que encontra (foi o que causou legendas cortadas em
+// texto com parênteses, ex: "(Texas Christian University)").
+const LINKEDIN_RESERVED_CHARS = /[\\|{}@[\]()<>*_~]/g;
+function escapeLinkedInText(text: string): string {
+  return text.replace(LINKEDIN_RESERVED_CHARS, (char) => `\\${char}`);
+}
+
 function requireEnv(name: string): string {
   const value = process.env[name];
   if (!value) {
@@ -117,7 +126,7 @@ export async function publishToLinkedin(post: Post): Promise<PublishRecord> {
     headers,
     body: JSON.stringify({
       author,
-      commentary: post.generated.captionLinkedin,
+      commentary: escapeLinkedInText(post.generated.captionLinkedin),
       visibility: "PUBLIC",
       distribution: {
         feedDistribution: "MAIN_FEED",
