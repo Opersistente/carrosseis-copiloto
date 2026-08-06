@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>LinkedIn — TÍTULO DO TEMA</title>
+<link href="../_vendor/inter.css" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A1220;
+    --primary: #4DA3FF;
+    --accent2: #6EE7F0;
+    --text: #ffffff;
+    --text-soft: rgba(255,255,255,0.72);
+    --text-softer: rgba(255,255,255,0.50);
+    --glow: rgba(77,163,255,0.18);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; width: 1080px; height: 1080px; overflow: hidden;
+    background: var(--bg); color: var(--text);
+    font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif;
+  }
+  .slide {
+    width: 1080px; height: 1080px; position: relative;
+    display: flex; flex-direction: column; padding: 96px;
+    background: radial-gradient(circle at 50% 0%, var(--glow), transparent 60%), var(--bg);
+  }
+  .brand { position: absolute; top: 64px; left: 96px; display: flex; align-items: center; gap: 10px;
+    font-size: 20px; font-weight: 800; letter-spacing: 0.02em; color: var(--text-softer); }
+  .brand .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 10px var(--primary); }
+
+  .body-wrap { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  .kicker { font-size: 24px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent2); margin-bottom: 26px; }
+  h1.headline { font-size: 72px; font-weight: 900; line-height: 1.14; margin: 0; text-wrap: balance; }
+  h1.headline .accent { color: var(--primary); }
+
+  .cue { display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: 600; color: var(--text-softer); }
+</style>
+</head>
+<body>
+  <section class="slide">
+    <div class="brand"><span class="dot"></span>PROJETO COPILOTO</div>
+    <div class="body-wrap">
+      <div class="kicker">Um caso real</div>
+      <h1 class="headline">Contratou mais de <span class="accent">2 mil GB</span> de internet no celular da empresa. Usou menos de <span class="accent">300</span>.</h1>
+    </div>
+    <div class="cue">↓ A explicação completa está no texto deste post</div>
+  </section>
+</body>
+</html>
