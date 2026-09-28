@@ -7,9 +7,6 @@ export type AutoReplyRule = {
   publicReplies: string[]; // uma é sorteada, pra não repetir sempre o mesmo texto
 };
 
-const WHATSAPP =
-  "https://wa.me/5547989160226?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20o%20Projeto%20Copiloto.";
-
 export const RULES: AutoReplyRule[] = [
   {
     keyword: "COPILOTO",
@@ -17,8 +14,8 @@ export const RULES: AutoReplyRule[] = [
       "Opa! Vi teu comentário 🙌\n\n" +
       "O Copiloto do Empresário organiza os números do teu negócio (caixa, margem por produto, onde tá vazando dinheiro) " +
       "e aponta o próximo passo. Quem decide continua sendo tu.\n\n" +
-      "Quer ver como isso funciona no teu caso? Me chama no WhatsApp:\n" +
-      WHATSAPP,
+      "Me conta aqui mesmo: qual é o teu negócio e o que mais te tira o sono hoje? " +
+      "Caixa apertado, margem baixa ou falta de tempo? Te respondo por aqui.",
     publicReplies: [
       "Te mandei no direct! 📩",
       "Enviei no teu direct, dá uma olhada 📩",
