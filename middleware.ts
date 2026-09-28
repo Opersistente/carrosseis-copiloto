@@ -18,7 +18,7 @@ async function isValidToken(token: string | undefined): Promise<boolean> {
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  if (pathname === "/login" || pathname === "/api/login" || pathname === "/api/intake") {
+  if (pathname === "/login" || pathname === "/api/login" || pathname === "/api/intake" || pathname === "/api/instagram/webhook") {
     return NextResponse.next();
   }
 
